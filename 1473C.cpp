@@ -29,7 +29,7 @@ typedef long double ld;
                                 freopen(file out, "w", stdout); \
                             }
 #define FAST_IO             std::ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-#define setpre(n)           fixed << setprecision(n)        
+#define setpre(n)           fixed << setprecision(n)
 bool endline = false;
 template<class T>
 istream& operator >> (istream& inp, vector<T>& v){
@@ -72,15 +72,17 @@ const int inf = 2e9; const ll linf = 1e18;
 #define right node << 1 | 1, tm + 1, tr
 #define int long long
 
-int n;
+int p[MAXN], n, k;
 
-void Solve(){
-    cin >> n; int cur = 9;
-    cout << 9;
-    if (n >= 2) cout << 8;
-    for (int i = 2; i < n; i++){
-        cout << cur;
-        cur = (cur + 1) % 10;
+void Solve() {
+    cin >> n >> k;
+    n -= k;
+    for (int i = 1; i <= k; i++){
+        p[i] = i;
+    }
+    reverse(p + k - n, p + k + 1);
+    for (int i = 1; i <= k; i++){
+        cout << p[i] << ' ';
     }
     cout << endl;
 }
@@ -93,15 +95,17 @@ signed main(){
     return 0;
 }
 /*
-./-=====>>><<<-------- DEBUG -------->>><<<=====-\.
-/.................................................\
 
+\/-=====>>><<<-------- DEBUG -------->>><<<=====-\/
+/\.............................................../\
 +====================== INP ======================+
 
 
 +====================== OUT ======================+
 
 
-\................................................./ 
-.\-=====>>><<<--------= END =-------->>><<<=====-/.
++======================*****======================+
+\/...............................................\/
+/\-=====>>><<<--------= END =-------->>><<<=====-/\
+
 */

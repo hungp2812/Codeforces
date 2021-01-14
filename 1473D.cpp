@@ -29,7 +29,7 @@ typedef long double ld;
                                 freopen(file out, "w", stdout); \
                             }
 #define FAST_IO             std::ios::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-#define setpre(n)           fixed << setprecision(n)        
+#define setpre(n)           fixed << setprecision(n)
 bool endline = false;
 template<class T>
 istream& operator >> (istream& inp, vector<T>& v){
@@ -72,17 +72,44 @@ const int inf = 2e9; const ll linf = 1e18;
 #define right node << 1 | 1, tm + 1, tr
 #define int long long
 
-int n;
+int n, m, val[MAXN];
+pii pf[MAXN], sf[MAXN];
 
-void Solve(){
-    cin >> n; int cur = 9;
-    cout << 9;
-    if (n >= 2) cout << 8;
-    for (int i = 2; i < n; i++){
-        cout << cur;
-        cur = (cur + 1) % 10;
+string s;
+
+void Solve() {
+    cin >> n >> m >> s;
+    int cur = 0;
+    for (int i = 1; i <= n; i++){
+        if (s[i - 1] == '+') cur ++;
+        if (s[i - 1] == '-') cur --;
+        val[i] = cur;
     }
-    cout << endl;
+    pf[0] = {0, 0};
+    sf[n + 1] = {val[n], val[n]};
+    for (int i = 1; i <= n; i++){
+        pf[i] = pf[i - 1];
+        pf[i].F = max(pf[i].F, val[i]);
+        pf[i].S = min(pf[i].S, val[i]);
+    }
+    for (int i = n; i >= 1; i--){
+        sf[i] = sf[i + 1];
+        sf[i].F = max(sf[i].F, val[i]);
+        sf[i].S = min(sf[i].S, val[i]);
+    }
+    while(m --){
+        int l, r;
+        cin >> l >> r;
+        // cout << pf[l - 1].F << ' ' << pf[l - 1].S << endl;
+        // cout << sf[r + 1].F << ' ' << sf[r + 1].S << endl;
+        int v = val[l - 1] - val[r];
+        pii bst = pf[l - 1];
+        // cout << bst.F << ' ' << bst.S << endl;
+        bst.F = max(bst.F, v + sf[r + 1].F);
+        bst.S = min(bst.S, v + sf[r + 1].S);
+        // cout << bst.F << ' ' << bst.S << ' ';
+        cout << bst.F - bst.S + 1 << endl;
+    }
 }
 
 signed main(){
@@ -93,15 +120,17 @@ signed main(){
     return 0;
 }
 /*
-./-=====>>><<<-------- DEBUG -------->>><<<=====-\.
-/.................................................\
 
+\/-=====>>><<<-------- DEBUG -------->>><<<=====-\/
+/\.............................................../\
 +====================== INP ======================+
 
 
 +====================== OUT ======================+
 
 
-\................................................./ 
-.\-=====>>><<<--------= END =-------->>><<<=====-/.
++======================*****======================+
+\/...............................................\/
+/\-=====>>><<<--------= END =-------->>><<<=====-/\
+
 */
