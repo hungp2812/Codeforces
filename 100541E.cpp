@@ -56,8 +56,7 @@ struct __init__ {
 		fill(idx, idx + K, -1);
 		for (int i = 2, c = 0; i < K; i++) if (p[i] == i) {
 			pr[c] = i, idx[i] = c ++;
-			for (int j = i * i; j < K; j += i)
-				p[j] = i;
+			for (int j = i * i; j < K; j += i) p[j] = i;
 		}
 	}
 } __init__;
@@ -67,15 +66,16 @@ struct segment_tree {
 #define left id << 1, tl, tm
 #define right id << 1 | 1, tm + 1, tr
 
-	int st[N << 2], lz[N << 2];
+	int64_t st[N << 2];
+	int lz[N << 2];
 	
 	inline void clear() {
-		for (int i = 1; i < n * 2 + 5; i++)
+		for (int i = 1; i < n << 2; i++)
 			st[i] = lz[i] = 0;
 	}
 
 	inline void apply(int id, int tl, int tr, int v) {
-		st[id] += (tr - tl + 1) * v, lz[id] += v;
+		st[id] += 1ll * (tr - tl + 1) * v, lz[id] += v;
 	}
 
 	inline void push(int id, int tl, int tr) {
@@ -89,7 +89,7 @@ struct segment_tree {
 		st[id] = st[id << 1] + st[id << 1 | 1];
 	}
 
-	int query(int l, int r, int id, int tl, int tr) {
+	int64_t query(int l, int r, int id, int tl, int tr) {
 		if (l > tr || tl > r) return 0;
 		if (l <= tl && tr <= r) return st[id];
 		return push(id, tl, tr), query(l, r, left) + query(l, r, right);
@@ -97,16 +97,16 @@ struct segment_tree {
 
 	inline void update(int l, int r, int v) {
 		// cout << "update " << l << ' ' << r << ' ' << v << '\n';
-		(l > r ? update(l, n, v, 1, 1, n), update(r, 1, v, 1, 1, n) : update(l, r, v, 1, 1, n));
+		(l > r ? update(l, n, v, 1, 1, n), update(1, r, v, 1, 1, n) : update(l, r, v, 1, 1, n));
 	}
 
-	inline int query(int l, int r) {
+	inline int64_t query(int l, int r) {
 		// cout << "query " << l << ' ' << r << '\n';
 		return (l > r ? query(l, n, 1, 1, n) + query(1, r, 1, 1, n) : query(l, r, 1, 1, n));
 	}
 } segtree[35];
 
-inline int binpow(int a, int b) {
+inline int binpow(int a, int64_t b) {
 	int r = 1;
 	while (b) {
 		if (b&1) r = 1ll * r * a % mod;
@@ -134,7 +134,7 @@ void Hollwo_Pelw() {
 			cin >> v;
 			while (v > 1) {
 				int x = p[v], c = 0;
-				while (v % x == 0) 
+				while (v % x == 0)
 					v /= x, c ++;
 				segtree[idx[x]].update(l, r, t == 1 ? c : -c);
 			}
