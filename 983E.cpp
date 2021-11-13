@@ -103,7 +103,7 @@ void __predfs_low__(int u) {
 pair<int, int> lift(int u, int w) {
 	int cnt = 0;
 	for (int i = 18; ~i; i--)
-		if (h[low[i][u]] > h[low[i][w]]) {
+		if (h[low[i][u]] > h[w]) {
 			cnt |= 1 << i;
 			u = low[i][u];
 		}
@@ -178,7 +178,6 @@ void Hollwo_Pelw() {
 	cin >> q;
 	for (int i = 1, u, v; i <= q; i++) {
 		cin >> u >> v;
-
 		int w = lca(u, v);
 		if (h[low[18][u]] > h[w] || h[low[18][v]] > h[w]) {
 			res[i] = -1; continue ;
@@ -199,6 +198,7 @@ void Hollwo_Pelw() {
 
 	__solve__(1);
 
-	for (int i = 1; i <= q; i++)
+	for (int i = 1; i <= q; i++) {
 		cout << res[i] << '\n';
+	}
 }
